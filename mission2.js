@@ -1,8 +1,8 @@
 //아래와 같이 동작하는 parse 함수를 구현.
 //출력된 name은 모두 'sk' 타입을 가진 사람들이다.
 //obj https://gist.github.com/nigayo/a9a118977f82780441db664d6785efe3
-var result = [];
-var widget = [{
+const resultObj = {};
+var obj = [{
     "id": 1,
     "name": "Yong",
     "phone": "010-2786-9902",
@@ -82,11 +82,14 @@ var widget = [{
         ]
     }]
 }]
-function getNumber(obj) {
+
+resultObj.sk = [];
+function parse(obj, keyword) {
     for (property in obj) {
-        if (obj[property] == 'sk') result.push(obj['name']);
-        else if (typeof (obj[property]) == 'object') getNumber(obj[property])
+        if (obj[property] == keyword) resultObj.sk.push(obj['name']);
+        else if (obj[property].constructor == Object || obj[property].constructor == Array) 
+            parse(obj[property], keyword);
     }
 }
-getNumber(widget);
-console.log(result);
+parse(obj, "sk");
+console.log(resultObj.sk);
