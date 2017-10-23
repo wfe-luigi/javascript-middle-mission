@@ -74,7 +74,7 @@ function getList(inputMoney) {
         drink_cost = obj[property]['cost'];
         drink_count = obj[property]['count'];
         if (drink_cost <= inputMoney && drink_count) result.push(property + "(" + drink_cost + ")");
-        else if (drink_cost <= inputMoney && !drink_cost) result.push(property + "(없음)");
+        else if (drink_cost <= inputMoney && !drink_count) result.push(property + "(없음)");
     }
     if (result.length == 0) {
         printMsg("구매가능 : 없음");
@@ -125,7 +125,7 @@ function canBuy(name, haveMoney) {
         printMsg("잔액이 ", drink_cost - haveMoney, "원 부족합니다.");
         getList(haveMoney);
     }
-    else if (drink_count == 0) {
+    else if (drink_count === 0) {
         printMsg("재고가 없습니다.");
         getList(haveMoney);
     }
