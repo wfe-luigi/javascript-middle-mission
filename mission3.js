@@ -73,12 +73,9 @@ function getList(inputMoney) {
     for (property in obj) {
         drink_cost = obj[property]['cost'];
         drink_count = obj[property]['count'];
-        if (drink_cost <= inputMoney) {
-            if (drink_count != 0) result.push(property + "(" + drink_cost + ")");
-            else result.push(property + "(없음)");
-        }
+        if (drink_cost <= inputMoney && drink_count) result.push(property + "(" + drink_cost + ")");
+        else if (drink_cost <= inputMoney && !drink_cost) result.push(property + "(없음)");
     }
-
     if (result.length == 0) {
         printMsg("구매가능 : 없음");
         continueUse(inputMoney);
@@ -92,22 +89,30 @@ function getList(inputMoney) {
 //구매가능음료수가 없을때, 돈을넣을지 반환할지 입력받는 함수
 function continueUse(inputMoney) {
     rl.question("동전을 넣으시거나, 반환을 입력해주세요 : ", function (answer) {
-        if (answer == "반환") {
+        if (answer === "반환") {
             printMsg("반환금액 : ", inputMoney, "원\n이용해주셔서 감사합니다.");
             rl.close();
         }
-        else getList(inputMoney + Number(answer));
+        else if (!isNaN(answer) && answer > 0) getList(inputMoney + Number(answer));
+        else {
+            printMsg("잘못입력하셨습니다.");
+            continueUse(inputMoney);
+        }
     });
 }
 
 //음료수선택을 입력받는 함수
 function selectDrink(inputMoney) {
     rl.question("선택하세요(반환입력시 사용종료) : ", function (answer) {
-        if (answer == "반환") {
+        if (answer === "반환") {
             printMsg("반환금액 : ", inputMoney, "원\n이용해주셔서 감사합니다.");
             rl.close();
         }
-        else canBuy(answer, inputMoney);
+        else if (isNaN(answer) && drinks[answer]) canBuy(answer, inputMoney);
+        else {
+            printMsg("잘못 입력하셨습니다.");
+            selectDrink(inputMoney);
+        }
     });
 }
 
@@ -115,6 +120,7 @@ function selectDrink(inputMoney) {
 function canBuy(name, haveMoney) {
     drink_cost = drinks[name]['cost'];
     drink_count = drinks[name]['count'];
+
     if (drink_cost > haveMoney) {
         printMsg("잔액이 ", drink_cost - haveMoney, "원 부족합니다.");
         getList(haveMoney);
