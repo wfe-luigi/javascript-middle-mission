@@ -58,7 +58,7 @@ function printMsg() {
 }
 
 //음료수를 구매하는 함수, 재고와 잔액을 차감
-function buy(name, haveMoney) {
+function buyDrink(name, haveMoney) {
     printMsg(name, "의 남은 재고 : ", --drinks[name]['count']);
     haveMoney -= drinks[name]['cost'];
     getList(haveMoney);
@@ -68,10 +68,11 @@ function buy(name, haveMoney) {
 function getList(inputMoney) {
     var result = [];
     var drink_cost, drink_count;
-    console.log("잔액 : " + inputMoney+"원");
-    for (property in drinks) {
-        drink_cost = drinks[property]['cost'];
-        drink_count = drinks[property]['count'];
+    var obj = drinks;
+    console.log("잔액 : " + inputMoney + "원");
+    for (property in obj) {
+        drink_cost = obj[property]['cost'];
+        drink_count = obj[property]['count'];
         if (drink_cost <= inputMoney) {
             if (drink_count != 0) result.push(property + "(" + drink_cost + ")");
             else result.push(property + "(없음)");
@@ -124,7 +125,7 @@ function canBuy(name, haveMoney) {
     }
     else {
         printMsg(name, " 이(가) 나왔습니다.");
-        buy(name, haveMoney);
+        buyDrink(name, haveMoney);
     }
 }
 
